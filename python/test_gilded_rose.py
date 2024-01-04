@@ -118,6 +118,19 @@ class GildedRoseTest(unittest.TestCase):
         gilded_rose.update_quality()
         self.assertEquals(initial_quality, items[0].quality)
 
-        
+    def test_conjured_item_degrades_twice_faster(self):
+        initial_quality = 30
+        items = [Item("Conjured Goblin's Horn", 2, initial_quality)]
+        gilded_rose = GildedRose(items)
+        gilded_rose.update_quality()
+        self.assertEquals(initial_quality - 2, items[0].quality)
+        gilded_rose.update_quality()
+        self.assertEquals(initial_quality - 4, items[0].quality)
+        gilded_rose.update_quality()
+        self.assertEquals(initial_quality - 8, items[0].quality)
+        gilded_rose.update_quality()
+        self.assertEquals(initial_quality - 12, items[0].quality)
+
+
 if __name__ == '__main__':
     unittest.main()

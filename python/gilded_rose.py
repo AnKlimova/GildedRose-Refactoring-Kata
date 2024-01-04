@@ -40,6 +40,9 @@ class GildedRose(object):
                 self._update_backstage_passes(item)
             elif item.name == "Aged Brie":
                 self._update_aged_brie(item)
+            elif "Conjured" in item.name:
+                self._update_simple_item(item)
+                self._update_simple_item(item)
             else:
                 self._update_simple_item(item)
             item.sell_in = item.sell_in - 1
