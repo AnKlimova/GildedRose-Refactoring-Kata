@@ -5,37 +5,41 @@ class GildedRose(object):
     def __init__(self, items):
         self.items = items
 
-    def _update_aged_brie(self, item):
+    def _reduce_quality(self, item):
+        if item.quality > 0:
+            item.quality = item.quality - 1
+
+    def _increase_quality(self, item):
         if item.quality < 50:
             item.quality = item.quality + 1
-            if item.sell_in < 0:
-                item.quality = item.quality + 1
+
+    def _update_aged_brie(self, item):
+        self._increase_quality(item)
+        if item.sell_in < 0:
+            self._increase_quality(item)
 
     def _update_backstage_passes(self, item):
-        if item.quality < 50:
-            item.quality = item.quality + 1
-            if item.sell_in < 11:
-                item.quality = item.quality + 1
-            if item.sell_in < 6:
-                item.quality = item.quality + 1
+        self._increase_quality(item)
+        if item.sell_in < 11:
+            self._increase_quality(item)
+        if item.sell_in < 6:
+            self._increase_quality(item)
         if item.sell_in <= 0:
             item.quality = 0
 
     def _update_simple_item(self, item):
-        if item.quality > 0:
-            item.quality = item.quality - 1
-        if item.sell_in < 0:
-            if item.quality > 0:
-                item.quality = item.quality - 1
+        self._reduce_quality(item)
+        if item.sell_in <= 0:
+            self._reduce_quality(item)
 
     def update_quality(self):
         for item in self.items:
+            if item.name == "Sulfuras, Hand of Ragnaros":
+                continue
             if item.name == "Backstage passes to a TAFKAL80ETC concert":
                 self._update_backstage_passes(item)
             elif item.name == "Aged Brie":
                 self._update_aged_brie(item)
-            elif item.name == "Sulfuras, Hand of Ragnaros":
-                pass
             else:
                 self._update_simple_item(item)
             item.sell_in = item.sell_in - 1
